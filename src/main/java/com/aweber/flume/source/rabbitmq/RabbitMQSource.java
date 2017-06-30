@@ -17,6 +17,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 
 public class RabbitMQSource extends AbstractSource implements Configurable, EventDrivenSource {
@@ -154,6 +155,8 @@ public class RabbitMQSource extends AbstractSource implements Configurable, Even
             connection.close();
         } catch (IOException ex) {
             throw new IllegalArgumentException("Could not connect to RabbitMQ: " + ex.toString());
+        } catch (TimeoutException e) {
+            throw new IllegalArgumentException("Could not connect to RabbitMQ: " + e.toString());
         }
     }
 

@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.*;
 
@@ -329,6 +330,8 @@ public class Consumer implements Runnable {
             connection.close();
         } catch (IOException ex) {
             logger.error("Error cleanly closing RabbitMQ connection: {}", ex.toString());
+        } catch (TimeoutException e) {
+            logger.error("Error cleanly closing RabbitMQ connection: {}", e.toString());
         }
     }
 

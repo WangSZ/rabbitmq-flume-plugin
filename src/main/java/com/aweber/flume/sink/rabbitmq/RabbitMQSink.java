@@ -20,6 +20,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 public class RabbitMQSink extends AbstractSink implements Configurable {
 
@@ -168,6 +169,8 @@ public class RabbitMQSink extends AbstractSink implements Configurable {
                 rmqChannel.close();
             } catch (IOException ex) {
                 logger.error("Could not close the RabbitMQ Channel: {}", ex.toString());
+            } catch (TimeoutException e) {
+                logger.error("Could not close the RabbitMQ Channel: {}", e.toString());
             }
         }
         if (connection != null) {
@@ -217,6 +220,9 @@ public class RabbitMQSink extends AbstractSink implements Configurable {
         } catch (IOException ex) {
             counterGroup.incrementAndGet(RABBITMQ_EXCEPTION_CONNECTION);
             throw new EventDeliveryException(ex.toString());
+        } catch (TimeoutException e) {
+            counterGroup.incrementAndGet(RABBITMQ_EXCEPTION_CONNECTION);
+            throw new EventDeliveryException(e.toString());
         }
     }
 
